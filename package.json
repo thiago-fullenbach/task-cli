@@ -1,0 +1,23 @@
+{
+  "name": "task-cli",
+  "version": "01.00.00",
+  "description": "",
+  "main": "main.js",
+  "bin": {
+    "task-cli": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiago-fullenbach/task-cli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thiago-fullenbach/task-cli/issues"
+  },
+  "homepage": "https://github.com/thiago-fullenbach/task-cli#readme"
+}
