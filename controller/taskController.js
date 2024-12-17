@@ -1,37 +1,49 @@
-const { INVALID_STATUS } = require('../models/taskModel')
+// Constants
+const { Status } = require('../utils/constants/objects')
+const { MISSING_ARGS_ERROR } = require('../utils/constants/strings')
 
-// TODO: Implementar armazenamento em arquivos JSON
-const tasks = []
+// Model
+const { Task } = require('../models/Task')
 
-const addTask = (task) => {
-    console.log(`Add Task: ${task}`)
-}
+// Utils
+const { isNullOrEmpty } = require('../utils/validation')
 
-const updateTask = (id, task) => {
-    console.log(`Update Task with ID=${id}: ${task}`)
-}
+// TODO: Implement file based JSON database
+let tasks = []
+let lastId = 0
 
-const deleteTask = (id) => {
-    console.log(`Delete Task with ID=${id}`)
-}
+const TaskController = {
+    addTask: description => {
+        let task = {}
+        if(isNullOrEmpty(description)) {
+            throw {
+                message: MISSING_ARGS_ERROR('description')
+            }
+        }
 
-const getTask = (id) => [
-    // Used only internally, as per project description
-    console.log(`Get Task with ID=${id}`)
-]
+        // Creates Task model from given data
+        task = {
+            ...Task,
+            id: ++lastId,
+            description,
+            status: Status.TODO,
+            createdAt: (new Date()).toISOString()
+        }
 
-const getTaskList = (status = INVALID_STATUS) => {
-    console.log(`Get All Tasks with STATUS=${status}`)
-}
+        // Adds to memory
+        tasks = [
+            task,
+            ...tasks
+        ]
 
-const markTaskAs = (status = INVALID_STATUS) => {
-    console.log(`Mark Task as ${status}`)
+        return task
+    },
+    updateTask: (id, task) => console.log(`Update Task with ID=${id}: ${task}`),
+    deleteTask: id => console.log(`Delete Task with ID=${id}`),
+    getTask: id => console.log(`Get Task with ID=${id}`),
+    getTaskList: (status = null) => console.log(`Get All Tasks with STATUS=${status}`)
 }
 
 module.exports = {
-    addTask,
-    updateTask,
-    deleteTask,
-    getTaskList,
-    markTaskAs
+    TaskController
 }
