@@ -17,7 +17,7 @@ const runCLICmd = async (cmd, args) => {
                 console.log(MSG_SUCCESS_ADD_TASK(addedTask))
                 break
             case Command.UPDATE:
-                let updatedTask = await TaskController.updateTaskDesc(args[0], args[1])
+                let updatedTask = await TaskController.updateTaskDesc(args[0], args.slice(1).join(' '))
                 console.log(MSG_SUCCESS_UPDATE_TASK(updatedTask))
                 break
             case Command.DELETE:
