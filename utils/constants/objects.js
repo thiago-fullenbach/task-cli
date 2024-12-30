@@ -1,5 +1,3 @@
-const { areStringsEqual } = require("../validation")
-
 // Available Commands
 const Command = Object.freeze({
     ADD: "add",
@@ -17,6 +15,7 @@ const Status = Object.freeze({
     IN_PROGRESS: { id: 1, name: "in-progress" },
     DONE: { id: 2, name: "done" },
     getByName: (name) => {
+        const { areStringsEqual } = require("../validation")
         return Object.values(Status).find(status => areStringsEqual(name, status.name))
     }
 })

@@ -1,4 +1,4 @@
-const { ERROR_INVALID_ARG_VALUE, ERROR_INVALID_DESC_SIZE } = require("./constants/strings")
+const { ERROR_INVALID_ARG_VALUE, ERROR_INVALID_DESC_SIZE, ERROR_MISSING_ARGS, ERROR_INVALID_STATUS } = require("./constants/strings")
 const { INVALID_ID } = require("./constants/values")
 
 const isNullOrEmpty = (text) => {
@@ -14,6 +14,8 @@ const areStringsEqual = (textA, textB) => {
 }
 
 const formatString = (text) => {
+    if(!text)
+        return text
     return text.replace(/['"]/g, '').trim()
 }
 
@@ -44,9 +46,24 @@ const validateDesc = (description) => {
     return formatString(description)
 }
 
+const validateStatus = (status, required = true) => {
+    const { Status } = require("./constants/objects")
+
+    if(!status && required) 
+        throw { message: ERROR_INVALID_ARG_VALUE('status') }
+
+    let objStatus = Status.getByName(formatString(status))
+    if(!objStatus && required) {
+        throw { message: ERROR_INVALID_STATUS(status) }
+    }
+
+    return objStatus
+}
+
 module.exports = {
     isNullOrEmpty,
     areStringsEqual,
     validateId,
-    validateDesc
+    validateDesc,
+    validateStatus
 }
