@@ -17,12 +17,12 @@ AVAILABLE COMMANDS:
 ------------------------------------------------
 
 1. add <description>  
-   Adds a new task with the provided description. The task will be created with the status 'TODO'.  
+   Adds a new task with the provided description (Max description size: 100 characters). The task will be created with the status 'TODO'. 
    Example:  
        task-cli add 'Buy bread and milk'
 
 2. update <id> <description>  
-   Updates the description of an existing task based on its ID.  
+   Updates the description of an existing task based on its ID (Max description size: 100 characters).  
    Example:  
        task-cli update 1 'Buy whole grain bread and skim milk'
 
@@ -63,6 +63,7 @@ TIPS:
 const ERROR_CMD_NOT_FND = (cmd) => getCLIErrorMsg(`Command not found: '${cmd}'`)
 const ERROR_INVALID_ARG_TYPE = (arg, expectedType) => getCLIErrorMsg(`Unexpected type ${typeof arg} - Expected ${expectedType}`)
 const ERROR_INVALID_ARG_VALUE = (value) => getCLIErrorMsg(`Invalid value: ${value}`)
+const ERROR_INVALID_DESC_SIZE = () => getCLIErrorMsg(`Task description must be 100 characters or less`)
 const ERROR_INVALID_STATUS = (arg) => getCLIErrorMsg(`Invalid status: ${arg}`)
 const ERROR_MISSING_ARGS = (argName) => getCLIErrorMsg(`Missing arguments: '${argName}'`)
 const ERROR_RSC_NOT_FOUND = (id) => `Reference object with ID=${id} not found`
@@ -79,6 +80,7 @@ module.exports = {
     ERROR_CMD_NOT_FND,
     ERROR_INVALID_ARG_TYPE,
     ERROR_INVALID_ARG_VALUE,
+    ERROR_INVALID_DESC_SIZE,
     ERROR_INVALID_STATUS,
     ERROR_MISSING_ARGS,
     ERROR_RSC_NOT_FOUND

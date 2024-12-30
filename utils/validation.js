@@ -1,8 +1,8 @@
-const { ERROR_INVALID_ARG_VALUE } = require("./constants/strings")
+const { ERROR_INVALID_ARG_VALUE, ERROR_INVALID_DESC_SIZE } = require("./constants/strings")
 const { INVALID_ID } = require("./constants/values")
 
 const isNullOrEmpty = (text) => {
-    return !text || text.trim() === ""
+    return !text || !text.trim()
 }
 
 const areStringsEqual = (textA, textB) => {
@@ -11,6 +11,10 @@ const areStringsEqual = (textA, textB) => {
     }
 
     return textA.trim().toUpperCase() === textB.trim().toUpperCase()
+}
+
+const formatString = (text) => {
+    return text.replace(/['"]/g, '').trim()
 }
 
 const validateId = (id) => {
@@ -28,8 +32,21 @@ const validateId = (id) => {
     return id
 }
 
+const validateDesc = (description) => {
+    if(isNullOrEmpty(description))
+        throw { message: ERROR_MISSING_ARGS('description') }
+
+    const length = description.length
+
+    if(length > 100)
+        throw { message: ERROR_INVALID_DESC_SIZE() }
+
+    return formatString(description)
+}
+
 module.exports = {
     isNullOrEmpty,
     areStringsEqual,
-    validateId
+    validateId,
+    validateDesc
 }

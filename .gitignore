@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # Local JSON DB
-./database/db.json
+/database/

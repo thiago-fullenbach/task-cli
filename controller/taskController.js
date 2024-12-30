@@ -6,18 +6,17 @@ const { ERROR_MISSING_ARGS, ERROR_INVALID_ARG_VALUE, ERROR_INVALID_STATUS } = re
 const { Task } = require('../models/Task')
 
 // Utils
-const { isNullOrEmpty, validateId } = require('../utils/validation')
+const { isNullOrEmpty, validateId, validateDesc } = require('../utils/validation')
 const Database = require('../utils/db')
 
 const TaskController = {
     addTask: async description => {
-        if(isNullOrEmpty(description))
-            throw { message: ERROR_MISSING_ARGS('description') }
+        description = validateDesc(description)
 
         // Creates Task model from given data
         let task = {
             ...Task,
-            description,
+            description: description.trim(),
             status: Status.TODO,
             createdAt: (new Date()).toISOString()
         }
@@ -26,15 +25,13 @@ const TaskController = {
         return await Database.addTask(task)
     },
     updateTaskDesc: async (id, description = null) => {
-        if(isNullOrEmpty(description))
-            throw { message: ERROR_MISSING_ARGS('description') }
-
         id = validateId(id)
+        description = validateDesc(description)
         let task = await TaskController.getTask(id)
 
         task = { 
             ...task, 
-            description,
+            description: description.trim(),
             updatedAt: (new Date()).toISOString() 
         }
 
