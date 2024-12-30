@@ -6,7 +6,7 @@ Command Line Interface App used for creating, reading, updating, and deleting ta
 
 
 
-## Rodando localmente
+## Running locally
 
 Clone the project
 
@@ -33,7 +33,7 @@ Use the CLI
 ```
 
 
-## Uso/Exemplos
+## Use/Examples
 
 ```bash
 # Adding a new task
