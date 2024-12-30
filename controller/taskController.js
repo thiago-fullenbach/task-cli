@@ -1,12 +1,12 @@
 // Constants
-const { Status } = require('../utils/constants/objects')
-const { ERROR_MISSING_ARGS, ERROR_RSC_NOT_FOUND, ERROR_INVALID_ARG_VALUE, ERROR_INVALID_ARG_TYPE, ERROR_INVALID_STATUS } = require('../utils/constants/strings')
+const { Status, Command } = require('../utils/constants/objects')
+const { ERROR_MISSING_ARGS, ERROR_INVALID_ARG_VALUE, ERROR_INVALID_STATUS } = require('../utils/constants/strings')
 
 // Model
 const { Task } = require('../models/Task')
 
 // Utils
-const { isNullOrEmpty } = require('../utils/validation')
+const { isNullOrEmpty, validateId } = require('../utils/validation')
 const Database = require('../utils/db')
 
 const TaskController = {
@@ -25,56 +25,43 @@ const TaskController = {
         // Adds to memory
         return await Database.addTask(task)
     },
-    updateTask: async (id, status = null) => {
-        try {
-            id = Number.parseInt(id)
-            let task = await TaskController.getTask(id)
+    updateTaskDesc: async (id, description = null) => {
+        if(isNullOrEmpty(description))
+            throw { message: ERROR_MISSING_ARGS('description') }
 
-            if(isNaN(id))
-                throw { message: ERROR_INVALID_ARG_TYPE(id, 'Number') }
+        id = validateId(id)
+        let task = await TaskController.getTask(id)
 
-            if(!status)
-                throw { message: ERROR_INVALID_ARG_VALUE(status) }
-
-            task = { 
-                ...task, 
-                status, 
-                updatedAt: (new Date()).toISOString() 
-            }
-
-            // Update task in array
-            return await Database.updateTask(id, task)
-        } catch(err) {
-            // Throws error forward
-            throw err
+        task = { 
+            ...task, 
+            description,
+            updatedAt: (new Date()).toISOString() 
         }
 
-        return {}
+        // Update task in array
+        return await Database.updateTask(id, task)
+    },
+    updateTaskStatus: async (id, status = null) => {      
+        if(!status) 
+            throw { message: ERROR_INVALID_ARG_VALUE('status') }
+
+        id = validateId(id)
+        let task = await TaskController.getTask(id)
+
+        task = { 
+            ...task, 
+            status,
+            updatedAt: (new Date()).toISOString() 
+        }
+
+        // Update task in array
+        return await Database.updateTask(id, task)
     },
     deleteTask: async id => {
-        try {
-            id = Number.parseInt(id)
-
-            if(isNaN(id))
-                throw { message: ERROR_INVALID_ARG_TYPE(id, 'Number') }
-
-            return await Database.deleteTask(id)
-        } catch(err) {
-            // Throws error forward
-            throw err
-        }
+        return await Database.deleteTask(validateId(id))
     },
     getTask: async id => {
-        try {
-            id = Number.parseInt(id)
-
-            if(isNaN(id))
-                throw { message: ERROR_INVALID_ARG_TYPE(id, 'Number') }
-
-            return await Database.readTask(id)
-        } catch(err) {
-            throw err
-        }
+        return await Database.readTask(validateId(id))
     },
     getTaskList: async (status = null) => {
         let objStatus = Status.getByName(status)

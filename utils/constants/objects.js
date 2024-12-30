@@ -1,5 +1,6 @@
 const { areStringsEqual } = require("../validation")
 
+// Available Commands
 const Command = Object.freeze({
     ADD: "add",
     UPDATE: "update",
@@ -10,6 +11,7 @@ const Command = Object.freeze({
     HELP: "help"
 })
 
+// Task Status
 const Status = Object.freeze({
     TODO: { id: 0, name: "todo" },
     IN_PROGRESS: { id: 1, name: "in-progress" },
